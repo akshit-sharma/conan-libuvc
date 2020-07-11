@@ -15,8 +15,10 @@ class LibuvcConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False], "jpeg_turbo": [True, False]}
     default_options = {"shared": False, "fPIC": True, "jpeg_turbo": False}
     generators = "cmake_find_package"
-    requires = "libusb/1.0.23"
+    requires = ["libusb/1.0.23",
+                "libjpeg/9d"]
     exports_sources = ["CMakeLists.txt"]
+    version = "0.0.6"
 
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -37,6 +39,7 @@ class LibuvcConan(ConanFile):
 
 
     def requirements(self):
+        pass
         if self.options.jpeg_turbo:
             self.requires("libjpeg-turbo/2.0.4")
         else:
@@ -67,10 +70,10 @@ endif()'''
 set(JPEG_FOUND ON)
 set(JPEG_INCLUDE_DIR ${{{0}_INCLUDE_DIRS}})
 set(JPEG_LINK_FLAGS ${{{0}_LIBS}})'''
-        if self.options.jpeg_turbo:
-            tools.replace_in_file(_cmakelists, _jpg_find, _jpg_replace.format('libjpeg-turbo'))
-        else:
-            tools.replace_in_file(_cmakelists, _jpg_find, _jpg_replace.format('libjpeg'))
+        # if self.options.jpeg_turbo:
+        #     tools.replace_in_file(_cmakelists, _jpg_find, _jpg_replace.format('libjpeg-turbo'))
+        # else:
+        #     tools.replace_in_file(_cmakelists, _jpg_find, _jpg_replace.format('libjpeg'))
 
         cmake = CMake(self)
         if self.options.shared:
